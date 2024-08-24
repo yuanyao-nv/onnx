@@ -83,7 +83,7 @@ The rules then become:
 
 ONNX_OPERATOR_SET_SCHEMA(
     Cast,
-    21,
+    23,
     OpSchema()
         .SetDoc(Cast_ver19_doc)
         .Attr(
@@ -112,19 +112,11 @@ ONNX_OPERATOR_SET_SCHEMA(
             OpSchema::Differentiable)
         .TypeConstraint(
             "T1",
-            {"tensor(float16)",    "tensor(float)",          "tensor(double)",       "tensor(int8)",
-             "tensor(int16)",      "tensor(int32)",          "tensor(int64)",        "tensor(uint8)",
-             "tensor(uint16)",     "tensor(uint32)",         "tensor(uint64)",       "tensor(bool)",
-             "tensor(string)",     "tensor(bfloat16)",       "tensor(float8e4m3fn)", "tensor(float8e4m3fnuz)",
-             "tensor(float8e5m2)", "tensor(float8e5m2fnuz)", "tensor(uint4)",        "tensor(int4)"},
+            OpSchema::all_non_complex_tensor_types_ir11(),
             "Constrain input types. Casting from complex is not supported.")
         .TypeConstraint(
             "T2",
-            {"tensor(float16)",    "tensor(float)",          "tensor(double)",       "tensor(int8)",
-             "tensor(int16)",      "tensor(int32)",          "tensor(int64)",        "tensor(uint8)",
-             "tensor(uint16)",     "tensor(uint32)",         "tensor(uint64)",       "tensor(bool)",
-             "tensor(string)",     "tensor(bfloat16)",       "tensor(float8e4m3fn)", "tensor(float8e4m3fnuz)",
-             "tensor(float8e5m2)", "tensor(float8e5m2fnuz)", "tensor(uint4)",        "tensor(int4)"},
+            OpSchema::all_non_complex_tensor_types_ir11(),
             "Constrain output types. Casting to complex is not supported.")
         .TypeAndShapeInferenceFunction([](InferenceContext& ctx) {
           propagateElemTypeFromAttributeToOutput(ctx, "to", 0);
@@ -144,7 +136,7 @@ See documentation of the Cast operator for further details.
 
 ONNX_OPERATOR_SET_SCHEMA(
     CastLike,
-    21,
+    23,
     OpSchema()
         .SetDoc(CastLike_ver21_doc)
         .Attr(
@@ -176,11 +168,11 @@ ONNX_OPERATOR_SET_SCHEMA(
             OpSchema::Differentiable)
         .TypeConstraint(
             "T1",
-            OpSchema::all_non_complex_tensor_types_ir10(),
+            OpSchema::all_non_complex_tensor_types_ir11(),
             "Constrain input types. Casting from complex is not supported.")
         .TypeConstraint(
             "T2",
-            OpSchema::all_non_complex_tensor_types_ir10(),
+            OpSchema::all_non_complex_tensor_types_ir11(),
             "Constrain output types. Casting to complex is not supported.")
         .TypeAndShapeInferenceFunction([](InferenceContext& ctx) {
           propagateElemTypeFromInputToOutput(ctx, 1, 0);

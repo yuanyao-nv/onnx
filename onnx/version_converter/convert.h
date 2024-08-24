@@ -776,6 +776,21 @@ class DefaultVersionConverter : public BaseVersionConverter {
     registerAdapter(std::make_unique<TypeRestriction>("GRU", OpSetID(22), OpSetID(21), bfloat16_not_allowed));
     registerAdapter(std::make_unique<TypeRestriction>("LSTM", OpSetID(22), OpSetID(21), bfloat16_not_allowed));
     registerAdapter(std::make_unique<TypeRestriction>("GridSample", OpSetID(22), OpSetID(21), bfloat16_not_allowed));
+
+    /******** 22 -> 23 ********/
+    registerAdapter(std::make_unique<CompatibleAdapter>("Cast", OpSetID(22), OpSetID(23)));
+    registerAdapter(std::make_unique<CompatibleAdapter>("CastLike", OpSetID(22), OpSetID(23)));
+    registerAdapter(std::make_unique<CompatibleAdapter>("DequantizeLinear", OpSetID(22), OpSetID(23)));
+    registerAdapter(std::make_unique<CompatibleAdapter>("QuantizeLinear", OpSetID(22), OpSetID(23)));
+
+    /******** 23 -> 22 ********/
+    const std::vector<TensorProto_DataType> ir11_types_not_in_ir10 = {TensorProto_DataType_FLOAT4E2M1};
+    registerAdapter(std::make_unique<TypeRestriction>("Cast", OpSetID(23), OpSetID(22), ir11_types_not_in_ir10));
+    registerAdapter(std::make_unique<TypeRestriction>("CastLike", OpSetID(23), OpSetID(22), ir11_types_not_in_ir10));
+    registerAdapter(
+        std::make_unique<TypeRestriction>("DequantizeLinear", OpSetID(23), OpSetID(22), ir11_types_not_in_ir10));
+    registerAdapter(
+        std::make_unique<TypeRestriction>("QuantizeLinear", OpSetID(23), OpSetID(22), ir11_types_not_in_ir10));
   }
 
   ModelProto convert_version(const ModelProto& mp_in, const OpSetID& initial_version, const OpSetID& target_version)
